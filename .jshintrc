@@ -3,7 +3,7 @@
     "devel"         : true,
     "node"          : true,
     "jquery"        : true,
-    "curly"         : true,
+    "curly"         : false,
     "expr"          : true,
     "globalstrict"  : true,
     "trailing"      : true,
