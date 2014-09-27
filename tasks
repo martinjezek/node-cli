@@ -1,0 +1,75 @@
+'use strict';
+
+var fs = require('fs');
+var path = require('path');
+var args = process.argv.splice(2);
+var command = args.shift();
+var task = args.join(' ');
+
+// storage file path is relative to current working directory
+var file = path.join(process.cwd(), '/.tasks');
+
+var listTasks = function(file) {
+    loadFile(file, function(tasks) {
+        if (tasks.length > 0) {
+            for(var i in tasks) {
+                console.log(tasks[i]);
+            }
+        } else {
+            console.log('Empty list, add something...');
+        }
+    });
+};
+
+var addTask = function(file, task) {
+    loadFile(file, function(tasks) {
+        tasks.push(task);
+        saveFile(file, tasks);
+    });
+};
+
+var saveFile = function(file, tasks) {
+    fs.writeFile(file, JSON.stringify(tasks), 'utf-8', function(err) {
+        if (err) throw err;
+        console.log('Saved');
+    });
+};
+
+var loadFile = function(file, cb) {
+    fs.exists(file, function(exists) {
+        var tasks = [];
+        if (exists) {
+            fs.readFile(file, 'utf-8', function(err, data) {
+                if (err) throw err;
+                data = data.toString();
+                var tasks = JSON.parse(data || '[]');
+                cb(tasks);
+            });
+        } else {
+            cb(tasks);
+        }
+    });
+};
+
+var help = function() {
+    console.log('usage: ' + process.argv[0] + ' tasks [--help] <command> [<args>]\n' +
+        '\n' +
+        'The most commonly used commands are:\n' +
+        '   add      Add a task to the list\n' +
+        '   list     List all saved tasks\n'
+    );
+};
+
+switch (command) {
+    case 'list':
+        listTasks(file);
+        break;
+    case 'add':
+        addTask(file, task);
+        break;
+    case '--help':
+        help();
+        break;
+    default:
+        help();
+}

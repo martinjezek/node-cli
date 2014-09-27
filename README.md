@@ -5,6 +5,26 @@
 
 > CLI with Node.js.
 
+## Usage
+
+Save `Milk and Sugar` item to the list.
+
+```shell
+node tasks add Milk and Sugar
+```
+
+List all saved items.
+
+```shell
+node tasks list
+```
+
+Help.
+
+```shell
+node tasks --help
+```
+
 ## Release History
 
 See the [CHANGELOG.md](https://github.com/martinjezek/node-cli/blob/master/CHANGELOG.md)
